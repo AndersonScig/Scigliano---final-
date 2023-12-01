@@ -8,13 +8,14 @@ class Helicopter(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
         self.image = (pygame.transform.scale(pygame.image.load('asset/helicopter.png'), (75, 75)))
-        # self.image = pygame.transform.flip(self.image, True, False)
         self.image.set_colorkey((0, 0, 0))
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
-        self.speed = 1.5
+        self.speed = 1.2
         self.rect.center = (x, y)
+        self.width = self.rect.width
+        self.height = self.rect.height
 
     def update(self, direction_helo):
         self.x += self.speed * cos(direction_helo)
