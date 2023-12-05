@@ -4,11 +4,9 @@ import pygame
 from board import boards
 from math import pi
 from parameters import *
-import time
 from math import atan2
 import random
 from helicopter import helicopters, Helicopter
-# from classes import walls, Wall
 
 pygame.init()
 welcome_font = pygame.font.Font('../Scigliano-final/asset/blox/blox2.ttf', 40)
@@ -145,7 +143,7 @@ def check_position(centerx, centery):
     turns = [False, False, False, False]
     numh = (HEIGHT - 50) // 32
     numw = (WIDTH // 30)
-    nume = 12
+    nume = 10
 
     def is_wall_collision(x, y):
         numh = (HEIGHT - 50) // 32
@@ -189,10 +187,6 @@ def check_position(centerx, centery):
                     turns[1] = True
                 if level[centery // numh][(centerx + nume) // numw] < 3 and not is_wall_collision(centerx + nume, centery):
                     turns[0] = True
-    # else:
-    #     turns[0] = True
-    #     turns[1] = True
-
     return turns
 
 
@@ -232,31 +226,6 @@ def display_lose_screen(screen, welcome_font, score):
     screen.blit(try_again_text, (330, 500))
     screen.blit(quit_text, (90, 500))
     pygame.display.flip()
-
-def reset_level():
-    global level
-    level = [row[:] for row in boards]
-
-
-def reset_game():
-    global score, lives, remaining_time, player_x, player_y, direction, direction_command, player_speed
-    global game_over, game_won, game_lost, waiting_for_key, powerup, power_counter
-    #reset all variables
-    player_speed = 2
-    score = 0
-    lives = 3
-    remaining_time = game_time
-    player_x = 285
-    player_y = 425
-    direction = 0
-    direction_command = 0
-    game_over = False
-    game_won = False
-    game_lost = False
-    waiting_for_key = False
-    powerup = False
-    power_counter = 0
-    reset_level()
 
 
 timer = pygame.time.Clock()
@@ -366,27 +335,20 @@ while run:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:  # Restart the game
                     # #Reset game variables to their initial state
-                    # score = 0
-                    # lives = 3
-                    # remaining_time = game_time
-                    # player_x = 285
-                    # player_y = 425
-                    # player_speed = 2
-                    # direction = 0
-                    # direction_command = 0
-                    # game_over = False
-                    # game_won = False
-                    # game_lost = False
-                    # waiting_for_key = False  # Add this line to exit the waiting state
-                    # my_helicopter = Helicopter(random.randint(0, WIDTH - helicopter.get_width()),
-                    #                            random.randint(0, 100))
-                    reset_game()
-                    waiting_for_key = False
-                    level = [row[:] for row in boards]
-
-
-
-
+                    score = 0
+                    lives = 3
+                    remaining_time = game_time
+                    player_x = 285
+                    player_y = 425
+                    player_speed = 2
+                    direction = 0
+                    direction_command = 0
+                    game_over = False
+                    game_won = False
+                    game_lost = False
+                    waiting_for_key = False  # Add this line to exit the waiting state
+                    my_helicopter = Helicopter(random.randint(0, WIDTH - helicopter.get_width()),
+                                               random.randint(0, 100))
                 elif event.key == pygame.K_q:  # Quit the game
                     run = False
 
@@ -401,15 +363,6 @@ while run:
                 direction_command = 3
         if event.type == pygame.QUIT:
             run = False
-        # if event.type == pygame.KEYUP:  # inorder to keep moving while key up
-        #     if event.key == pygame.K_RIGHT and direction_command == 0:
-        #         direction_command = 0
-        #     if event.key == pygame.K_LEFT and direction_command == 1:
-        #         direction_command = 1
-        #     if event.key == pygame.K_UP and direction_command == 2:
-        #         direction_command = 2
-        #     if event.key == pygame.K_DOWN and direction_command == 3:
-        #         direction_command = 3
 
         for x in range(4):
             if direction_command == x and turns_allowed[x]:
