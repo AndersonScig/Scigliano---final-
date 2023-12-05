@@ -1,4 +1,5 @@
 #get the board back tp
+#credit
 import sys
 import pygame
 from board import boards
@@ -16,7 +17,7 @@ def start_game():
     global draw_message
     draw_message = False
 
-
+#draw the directions and objective
 def draw_intro(screen):
     font = pygame.font.Font('../Scigliano-final/asset/blox/blox2.ttf', 20)
     # Font for the "Welcome to RUN!!" text with a larger size
@@ -72,6 +73,7 @@ screen.blit(background, (0, 0))
 draw_intro(screen)
 pygame.display.flip()
 
+#blit the score, lives, and other
 def draw_rand():
     score_text = font.render(f'Score {score}', True, 'white')
     screen.blit(score_text, (10, HEIGHT - 35))
@@ -80,6 +82,7 @@ def draw_rand():
     for x in range(lives):
         pygame.draw.circle(screen, 'green', (475 + x * 30, HEIGHT - 25), 10)
 
+#collect coins and power up
 def check_collisions(score, power, power_count):
     numh = (HEIGHT - 50) // 32
     numw = WIDTH // 30
@@ -95,7 +98,7 @@ def check_collisions(score, power, power_count):
             power_count = 0
     return score, power, power_count
 
-
+#all board 1-8
 def draw_board():
     numh = ((HEIGHT - 50) // 32)  # height of block
     numw = (WIDTH // 30)  # width of block
@@ -260,6 +263,7 @@ background_sound.set_volume(0.2)
 money_bag_sound = pygame.mixer.Sound("../Scigliano-final/asset/money_sound.wav")
 my_helicopter = Helicopter(random.randint(0, WIDTH - helicopter.get_width()), random.randint(0, 100))
 
+#main loop
 run = True
 while run:
     timer.tick(fps)
