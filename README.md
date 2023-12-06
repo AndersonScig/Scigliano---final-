@@ -9,7 +9,6 @@ Welcome to RUN, my final project, an exciting Python game where you play as a ro
 - [How to Play](#how-to-play)
 - [Requirements](#requirements)
 - [Sources of Help](#Sources of Help)
-- [Installation](#installation)
 
 
 ## Description
@@ -38,12 +37,5 @@ RUN is a Python game built using the Pygame library. The objective is to collect
 
 ## Sources of Help
  I received help and inspiration for my game from my classmates Kevin Lee, Ziming Huang, and Gabe Slind. An online source of help was the python content creator LeMaster Tech.
-## Installation
-
-```bash
-git clone https://github.com/your-username/RUN.git
-cd RUN
-pip install -r requirements.txt
-python run.py
 
 
