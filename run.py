@@ -1,13 +1,13 @@
-#get the board back tp
-#credit
+# get the board back tp
+# credit to LeMaster Tech for pieces of code
 import sys
-import pygame
+# import pygame
 from board import boards
 from math import pi
 from parameters import *
 from math import atan2
 import random
-from helicopter import helicopters, Helicopter
+from helicopter import Helicopter
 
 pygame.init()
 welcome_font = pygame.font.Font('../Scigliano-final/asset/blox/blox2.ttf', 40)
@@ -17,7 +17,8 @@ def start_game():
     global draw_message
     draw_message = False
 
-#draw the directions and objective
+
+# draw the directions and objective
 def draw_intro(screen):
     font = pygame.font.Font('../Scigliano-final/asset/blox/blox2.ttf', 20)
     # Font for the "Welcome to RUN!!" text with a larger size
@@ -56,24 +57,32 @@ def draw_intro(screen):
 
 
 draw_message = True
+# Create a copy of the current screen for later use
 background = screen.copy()
 draw_intro(background)
-
 if draw_message:
+    # Draw the background on the screen
     screen.blit(background, (0, 0))
+    # Draw the introduction screen on the screen
     draw_intro(screen)
+    # Update the display
     pygame.display.flip()
 
+# Continue the loop while draw_message is True
 while draw_message:
+    # Check for events in the event queue
     for event in pygame.event.get():
+        # Check if a key is pressed and it is the space key
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            # Call the start_game function to modify game state
             start_game()
 
 screen.blit(background, (0, 0))
 draw_intro(screen)
 pygame.display.flip()
 
-#blit the score, lives, and other
+
+# blit the score, lives, and other
 def draw_rand():
     score_text = font.render(f'Score {score}', True, 'white')
     screen.blit(score_text, (10, HEIGHT - 35))
@@ -82,11 +91,15 @@ def draw_rand():
     for x in range(lives):
         pygame.draw.circle(screen, 'green', (475 + x * 30, HEIGHT - 25), 10)
 
-#collect coins and power up
+
+# collect coins and power up
 def check_collisions(score, power, power_count):
+    # Calculate the number of rows and columns in the grid
     numh = (HEIGHT - 50) // 32
     numw = WIDTH // 30
+    # Check if the player is within the horizontal boundaries of the grid
     if 0 < player_x < WIDTH:
+        # Check if the player is on a coin (type 1) or a money bag (type 2)
         if level[center_y // numh][center_x // numw] == 1:
             level[center_y // numh][center_x // numw] = 0
             score += 1
@@ -96,9 +109,11 @@ def check_collisions(score, power, power_count):
             score += 10
             power = True
             power_count = 0
+    # Return the updated score, power, and power_count
     return score, power, power_count
 
-#all board 1-8
+
+# all board 1-8
 def draw_board():
     numh = ((HEIGHT - 50) // 32)  # height of block
     numw = (WIDTH // 30)  # width of block
@@ -106,10 +121,10 @@ def draw_board():
         for j in range(len(level[i])):  # row
             if level[i][j] == 1:
                 screen.blit(coin, (
-                j * numw + (.5 * numw) - 7, i * numh + (.5 * numh) - 5))  # left
+                    j * numw + (.5 * numw) - 7, i * numh + (.5 * numh) - 5))  # left
             if level[i][j] == 2:
                 screen.blit(money_bag, (
-                j * numw + (.5 * numw) - 10, i * numh + (.5 * numh) - 14))  # left
+                    j * numw + (.5 * numw) - 10, i * numh + (.5 * numh) - 14))  # left
             if level[i][j] == 3:
                 pygame.draw.line(screen, color, (j * numw + (.5 * numw), i * numh),
                                  (j * numw + (.5 * numw), i * numh + numh), 3)  # start and end point of the line
@@ -153,48 +168,66 @@ def check_position(centerx, centery):
         numw = (WIDTH // 30)
         return level[y // numh][x // numw] >= 3
 
-    # check collisions based on center x and center y of player +/- error acceptance
+    # Check collisions based on center x and center y of player +/- error acceptance
     if centerx // 30 < 29:
+        # Check for collisions when moving to the right
         if direction == 0:
-            if (level[centery // numh][(centerx - nume) // numw]) < 3 and not is_wall_collision(centerx - nume, centery):
+            if (level[centery // numh][(centerx - nume) // numw]) < 3 and not is_wall_collision(centerx - nume,
+                                                                                                centery):
                 turns[1] = True
+        # Check for collisions when moving to the left
         if direction == 1:
             if level[centery // numh][(centerx + nume) // numw] < 3 and not is_wall_collision(centerx + nume, centery):
                 turns[0] = True
+        # Check for collisions when moving up
         if direction == 2:
             if level[(centery + nume) // numh][centerx // numw] < 3 and not is_wall_collision(centerx, centery + nume):
                 turns[3] = True
+        # Check for collisions when moving down
         if direction == 3:
             if level[(centery - nume) // numh][centerx // numw] < 3 and not is_wall_collision(centerx, centery - nume):
                 turns[2] = True
 
+        # Additional checks when facing up or down
         if direction == 2 or direction == 3:
-            if 5 <= centerx % numw <= 25:
-                if level[(centery + nume) // numh][centerx // numw] < 3 and not is_wall_collision(centerx, centery + nume):
+            if 3 <= centerx % numw <= 27:
+                if level[(centery + nume) // numh][centerx // numw] < 3 and not is_wall_collision(centerx,
+                                                                                                  centery + nume):
                     turns[3] = True
-                if level[(centery - nume) // numh][centerx // numw] < 3 and not is_wall_collision(centerx, centery - nume):
+                if level[(centery - nume) // numh][centerx // numw] < 3 and not is_wall_collision(centerx,
+                                                                                                  centery - nume):
                     turns[2] = True
-            if 5 <= centery % numh <= 25:
-                if level[centery // numh][(centerx - numw) // numw] < 3 and not is_wall_collision(centerx - numw, centery):
+            if 3 <= centery % numh <= 27:
+                if level[centery // numh][(centerx - numw) // numw] < 3 and not is_wall_collision(centerx - numw,
+                                                                                                  centery):
                     turns[1] = True
-                if level[centery // numh][(centerx + numw) // numw] < 3 and not is_wall_collision(centerx + numw, centery):
+                if level[centery // numh][(centerx + numw) // numw] < 3 and not is_wall_collision(centerx + numw,
+                                                                                                  centery):
                     turns[0] = True
+
+        # Additional checks when facing right or left
         if direction == 0 or direction == 1:
-            if 5 <= centerx % numw <= 25:
-                if level[(centery + numh) // numh][centerx // numw] < 3 and not is_wall_collision(centerx, centery + numh):
+            if 3 <= centerx % numw <= 27:
+                if level[(centery + numh) // numh][centerx // numw] < 3 and not is_wall_collision(centerx,
+                                                                                                  centery + numh):
                     turns[3] = True
-                if level[(centery - numh) // numh][centerx // numw] < 3 and not is_wall_collision(centerx, centery - numh):
+                if level[(centery - numh) // numh][centerx // numw] < 3 and not is_wall_collision(centerx,
+                                                                                                  centery - numh):
                     turns[2] = True
-            if 5 <= centery % numh <= 25:
-                if level[centery // numh][(centerx - nume) // numw] < 3 and not is_wall_collision(centerx - nume, centery):
+            if 3 <= centery % numh <= 27:
+                if level[centery // numh][(centerx - nume) // numw] < 3 and not is_wall_collision(centerx - nume,
+                                                                                                  centery):
                     turns[1] = True
-                if level[centery // numh][(centerx + nume) // numw] < 3 and not is_wall_collision(centerx + nume, centery):
+                if level[centery // numh][(centerx + nume) // numw] < 3 and not is_wall_collision(centerx + nume,
+                                                                                                  centery):
                     turns[0] = True
     return turns
 
 
 def move_player(play_x, play_y):
+    # Check allowed turns based on the player's position
     turns_allowed = check_position(play_x + 15, play_y + 18)
+    # Move the player based on the direction and allowed turns
     if direction == 0 and play_x < WIDTH - 60 and turns_allowed[0]:
         play_x += player_speed
     elif direction == 1 and play_x > 40 and turns_allowed[1]:
@@ -203,6 +236,7 @@ def move_player(play_x, play_y):
         play_y -= player_speed
     elif direction == 3 and play_y < HEIGHT - 98 and turns_allowed[3]:
         play_y += player_speed
+
     return play_x, play_y
 
 
@@ -212,11 +246,12 @@ def display_win_screen(screen, welcome_font, score):
     win_text2 = welcome_font.render(f"score {score:.0f}", True, 'green')
     try_again_text = font.render(f"press r to try again", True, 'green')
     quit_text = font.render(f"press q to quit", True, 'green')
-    screen.blit(win_text1, (WIDTH // 2 - win_text1.get_width() // 2, HEIGHT/2-100))
-    screen.blit(win_text2, (WIDTH // 2 - win_text2.get_width() // 2, (HEIGHT/2)))
+    screen.blit(win_text1, (WIDTH // 2 - win_text1.get_width() // 2, HEIGHT / 2 - 100))
+    screen.blit(win_text2, (WIDTH // 2 - win_text2.get_width() // 2, (HEIGHT / 2)))
     screen.blit(try_again_text, (360, 500))
     screen.blit(quit_text, (90, 500))
     pygame.display.flip()
+
 
 def display_lose_screen(screen, welcome_font, score):
     screen.fill('black')
@@ -224,8 +259,8 @@ def display_lose_screen(screen, welcome_font, score):
     lose_text2 = welcome_font.render(f"score {score:.0f}", True, 'red')
     try_again_text = font.render(f"press r to try again", True, 'green')
     quit_text = font.render(f"press q to quit", True, 'green')
-    screen.blit(lose_text1, (WIDTH // 2 - lose_text1.get_width() // 2, (HEIGHT/2-100)))
-    screen.blit(lose_text2, (WIDTH // 2 - lose_text2.get_width() // 2, (HEIGHT/2)))
+    screen.blit(lose_text1, (WIDTH // 2 - lose_text1.get_width() // 2, (HEIGHT / 2 - 100)))
+    screen.blit(lose_text2, (WIDTH // 2 - lose_text2.get_width() // 2, (HEIGHT / 2)))
     screen.blit(try_again_text, (330, 500))
     screen.blit(quit_text, (90, 500))
     pygame.display.flip()
@@ -235,6 +270,7 @@ timer = pygame.time.Clock()
 fps = 60
 font = pygame.font.Font('../Scigliano-final/asset/blox/blox2.ttf', 20)
 level = boards
+original_board = boards
 color = 'black'
 player_x = 285  # start pos x
 player_y = 425  # start pos y
@@ -263,7 +299,7 @@ background_sound.set_volume(0.2)
 money_bag_sound = pygame.mixer.Sound("../Scigliano-final/asset/money_sound.wav")
 my_helicopter = Helicopter(random.randint(0, WIDTH - helicopter.get_width()), random.randint(0, 100))
 
-#main loop
+# main loop
 run = True
 while run:
     timer.tick(fps)
@@ -286,12 +322,12 @@ while run:
     my_helicopter.update(direction_helo)
 
     if not game_over:
-        remaining_time -= 1/fps
+        remaining_time -= 1 / fps
         time_text = font.render(f'Time {remaining_time:.0f}', True, 'white')
         screen.blit(time_text, (220, HEIGHT - 35))
 
-    if (my_helicopter.x - BUFFER < center_x < my_helicopter.x + my_helicopter.width + BUFFER) \
-            and (my_helicopter.y - BUFFER < center_y < my_helicopter.y + my_helicopter.height + BUFFER):
+    if (my_helicopter.x < center_x < my_helicopter.x + my_helicopter.width) \
+            and (my_helicopter.y < center_y < my_helicopter.y + my_helicopter.height):
         lives -= 1
         my_helicopter = Helicopter(random.randint(0, WIDTH - helicopter.get_width()), random.randint(0, 100))
         player_x = 285  # start pos x
@@ -299,7 +335,6 @@ while run:
         direction = 0
         direction_command = 0
         power_counter = 0
-
 
     if powerup and power_counter < 300:
         power_counter += 1
@@ -350,6 +385,8 @@ while run:
                     game_over = False
                     game_won = False
                     game_lost = False
+                    level = boards
+                    draw_board()
                     waiting_for_key = False  # Add this line to exit the waiting state
                     my_helicopter = Helicopter(random.randint(0, WIDTH - helicopter.get_width()),
                                                random.randint(0, 100))

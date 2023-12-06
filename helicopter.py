@@ -1,7 +1,6 @@
 import pygame
 from parameters import *
 from math import cos, sin
-import random
 
 
 class Helicopter(pygame.sprite.Sprite):
