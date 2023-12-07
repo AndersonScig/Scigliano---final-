@@ -1,7 +1,4 @@
-# get the board back tp
-# credit to LeMaster Tech for pieces of code
 import sys
-# import pygame
 from board import boards
 from math import pi
 from parameters import *
@@ -244,12 +241,10 @@ def display_win_screen(screen, welcome_font, score):
     screen.fill('black')
     win_text1 = welcome_font.render(f"Congratulations   You won", True, 'green')
     win_text2 = welcome_font.render(f"score {score:.0f}", True, 'green')
-    try_again_text = font.render(f"press r to try again", True, 'green')
     quit_text = font.render(f"press q to quit", True, 'green')
     screen.blit(win_text1, (WIDTH // 2 - win_text1.get_width() // 2, HEIGHT / 2 - 100))
     screen.blit(win_text2, (WIDTH // 2 - win_text2.get_width() // 2, (HEIGHT / 2)))
-    screen.blit(try_again_text, (360, 500))
-    screen.blit(quit_text, (90, 500))
+    screen.blit(quit_text, (WIDTH // 2 - quit_text.get_width() // 2, 500))
     pygame.display.flip()
 
 
@@ -257,12 +252,10 @@ def display_lose_screen(screen, welcome_font, score):
     screen.fill('black')
     lose_text1 = welcome_font.render(f"Game over   try again", True, 'red')
     lose_text2 = welcome_font.render(f"score {score:.0f}", True, 'red')
-    try_again_text = font.render(f"press r to try again", True, 'green')
     quit_text = font.render(f"press q to quit", True, 'green')
     screen.blit(lose_text1, (WIDTH // 2 - lose_text1.get_width() // 2, (HEIGHT / 2 - 100)))
     screen.blit(lose_text2, (WIDTH // 2 - lose_text2.get_width() // 2, (HEIGHT / 2)))
-    screen.blit(try_again_text, (330, 500))
-    screen.blit(quit_text, (90, 500))
+    screen.blit(quit_text, (WIDTH // 2 - quit_text.get_width() // 2, 500))
     pygame.display.flip()
 
 
@@ -372,25 +365,7 @@ while run:
 
         if waiting_for_key:
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_r:  # Restart the game
-                    # #Reset game variables to their initial state
-                    score = 0
-                    lives = 3
-                    remaining_time = game_time
-                    player_x = 285
-                    player_y = 425
-                    player_speed = 2
-                    direction = 0
-                    direction_command = 0
-                    game_over = False
-                    game_won = False
-                    game_lost = False
-                    level = boards
-                    draw_board()
-                    waiting_for_key = False  # Add this line to exit the waiting state
-                    my_helicopter = Helicopter(random.randint(0, WIDTH - helicopter.get_width()),
-                                               random.randint(0, 100))
-                elif event.key == pygame.K_q:  # Quit the game
+                if event.key == pygame.K_q:  # Quit the game
                     run = False
 
         if event.type == pygame.KEYDOWN:  # first very simple like fish game

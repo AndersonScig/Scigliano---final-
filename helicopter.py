@@ -1,4 +1,3 @@
-import pygame
 from parameters import *
 from math import cos, sin
 
@@ -11,7 +10,7 @@ class Helicopter(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
-        self.speed = 1.2
+        self.speed = 1.15
         self.rect.center = (x, y)
         self.width = self.rect.width
         self.height = self.rect.height
